@@ -1,24 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import { Route, Routes, Navigate } from 'react-router-dom';
+import { useAuth } from './components/pages/AuthContext';
+import LoginPage from './components/pages/login';
+import OrdersPage from './components/pages/order';
+import DarkModeSwitch from './components/DarkModeSwitch';
+import { Box } from '@chakra-ui/react';
 
 function App() {
+  const  { isAuthenticated } = useAuth();
+  console.log(isAuthenticated);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+        <Box p={4} width="100%" maxWidth="500px" position="absolute" top={4} right={4}>
+          <DarkModeSwitch />
+        </Box>
+        <Routes>
+          <Route path="*" element={<Navigate to="/login" replace={true} />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/orders" element={isAuthenticated ? <OrdersPage /> : <Navigate to="/login" />} />
+        </Routes>
+      </>
   );
 }
 
